@@ -1,0 +1,723 @@
+
+
+//Notes:
+
+------------------Understanding Component Basics-------------------------
+
+React is all about components to construct applications.
+
+Below we see the Component is imported from react we then see the class App component created in App.js as it extends from the object or class Component.
+
+
+--Code App.js: 
+
+import React, {Component} from 'react';
+import './App.css';
+
+class App extends Component {
+    render() {
+      return (
+          <div className="App">
+            <h1>Hi, I'm a React App</h1>
+          </div>
+      );
+    }
+}
+
+export default App;
+
+
+--The app component is used in the index.js file where it is rendered into the Id 'root' element
+
+
+--Code index.js:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App'
+import registerServiceWorker from './registerServiceWorker';
+
+ReactDOM.render(<App />, document.getElementById('root'));
+
+registerServiceWorker();
+
+
+
+
+-------------------------------------------
+
+//Exports & Imports
+
+
+Export files --------
+-------------------------------------------
+
+person.js file
+const person = {
+    name: 'Max'
+}
+
+export default person
+-------------------------------------------
+
+utility.js file
+export const clean = ()=>{...}
+export const baseData = 10;
+-------------------------------------------
+
+
+
+
+Import files to app.js file --------
+
+-2 options because this object was set as default
+import person from './person.js'
+import prs from ',/person.js'
+
+-These two objects have to be imported in this manner because they are not set as default
+import {baseData} from './utility.js'
+import [clean] from './utility.js'
+-------------------------------------------
+
+
+-------------------------------------------
+When you create a js file you need to set it up so it works as needed in react
+
+//Import the react library:
+Code App.js:
+import React from 'react';
+-------------------------------------------
+
+//Render things to the page using ReactDOM.render but first you have to import it from the React DOM library.
+Code:
+import ReactDOM from 'react-dom';
+-------------------------------------------
+
+
+//Create an element using the  React.createElement()
+
+Please note we do not use the React.createElement for creating all the needed elements because it would be too cumbersome. This is the reason we instead use JSX, 
+
+JSX:
+<div classname="App">
+    <h1>Hi, I'm a React App!</h1>
+</div>
+
+But JSX does get converted in the background to React.createElement().
+
+--React.createElement Arguments:--
+Let's briefly talk about the arguments of React.createElement().
+
+The first one is the type of element we're creating, in this case an <h1> tag. This could also be another React component. If we're creating an HTML element, we pass in the element name as a string, just like we do below ex: 'h1'. If we're creating a React component, we pass in the variable that the component is assigned to.
+
+The second argument is an object containing properties ('props' in React terms) or something like a 'classname' to add css, that get passed to the component. Since we're just getting started with React, we won't use these just yet — but be aware that the second options serves this purpose.
+
+Finally, the last argument is the children of that component. This can be a quoted string like shown below, in which case the content will be interpreted as text ex: 'My First React Code'. However, we can also pass in a reference to another component, allowing us to nest elements and components within each other (we'll get to that in a bit).
+
+Code:
+const title = React.creatElement('h1', {}, 'My First React Code');
+
+
+-------------------------------------------
+
+
+-Render-
+Now that we have our element, it's time to render it to the page. We do this using ReactDOM.render(). 
+
+This takes two arguments: the first one being the thing we want to render (our title element), and the second one is a target DOM node to render things into.
+
+Code:
+ReactDOM.render(
+  title,
+  document.getElementById('global')
+);
+-------------------------------------------
+
+
+
+
+All put together it should look like this:
+
+Code:
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const title = React.createElement('h1', {}, 'My First React Code');
+
+ReactDOM.render(
+  title,
+  document.getElementById('global')
+);
+
+
+
+-------------------------------------------
+-------------------------------------------
+-------------------------------------------
+
+
+JSX
+
+Class cannot be used this is why we use className.
+<div> etc.. are provided by JSX it is not real html but in most cases works like it.
+
+
+
+
+
+
+----Other Side Notes:----
+
+Becoming a parent
+Now that we know how to render stuff, let's make our app a little more complex by introducing child elements. We'll create an element to render our title in (let's call it a container). Remember how we added a text child in our title component? Now we're going to add an element as a child, so we pass it by reference instead of using a string:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const title = React.createElement('h1', {}, 'My First React Code');
+const container = React.createElement('div', {}, title);
+
+ReactDOM.render(
+  container,
+  document.getElementById('global')
+);
+Our title seems a little lonely though... Let's add a sibling! We'll create a paragraph element and then pass it as another child to our container children.
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const title = React.createElement('h1', {}, 'My First React Code');
+const paragraph = React.createElement('p', {}, 'Writing some more HTML. Cool stuff!');
+const container = React.createElement('div', {}, [title, paragraph]);
+
+ReactDOM.render(
+  container,
+  document.getElementById('global')
+);
+Note how if we want to add multiple children, we use an array!
+
+Your children's children
+We can nest children as much as we want. We also don't need to store our elements in variables before using them, we can declare them inline as well (though the downside of this is less readable code):
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const list =
+  React.createElement('div', {},
+    React.createElement('h1', {}, 'My favorite ice cream flavors'),
+    React.createElement('ul', {},
+      [
+        React.createElement('li', {}, 'Chocolate'),
+        React.createElement('li', {}, 'Vanilla'),
+        React.createElement('li', {}, 'Banana')
+      ]
+    )
+  );
+
+ReactDOM.render(
+  list,
+  document.getElementById('global')
+);
+Adding attributes
+As mentioned before, we pass properties to an element using the second argument (an object, which we've left empty for now). Suppose we wanted to add some classes to make our ice cream flavors stand out. What would we need to add? Let's try this...
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const list =
+  React.createElement('div', {},
+    React.createElement('h1', {}, 'My favorite ice cream flavors'),
+    React.createElement('ul', {},
+      [
+        React.createElement('li', { class: 'brown' }, 'Chocolate'),
+        React.createElement('li', { class: 'white' }, 'Vanilla'),
+        React.createElement('li', { class: 'yellow' }, 'Banana')
+      ]
+    )
+  );
+
+ReactDOM.render(
+  list,
+  document.getElementById('global')
+);
+Oops! That doesn't seem to work. If we take a look at our console, we'll see a helpful error message (ignore the error message about a key property, we'll get to that in another lesson):
+
+Warning: Unknown DOM property class. Did you mean className?
+    in li
+    in ul
+    in div
+Using className instead will do the trick. Awesome! The prop is called className because class is a reserved keyword in JavaScript. Using reserved keywords as keys in an object is something that you should never do, since this can result in unexpected behavior. Instead, React expects the className prop instead, if we want to add a class to our element.
+
+Let's update our code.
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const list =
+  React.createElement('div', {},
+    React.createElement('h1', {}, 'My favorite ice cream flavors'),
+    React.createElement('ul', {},
+      [
+        React.createElement('li', { className: 'brown' }, 'Chocolate'),
+        React.createElement('li', { className: 'white' }, 'Vanilla'),
+        React.createElement('li', { className: 'yellow' }, 'Banana')
+      ]
+    )
+  );
+
+ReactDOM.render(
+  list,
+  document.getElementById('global')
+);
+We can also add any other HTML attributes here, like disabled, id, and so on. These props are also used to pass in custom data to our components, but we'll get to that later!
+
+----Other Side Notes End!----
+
+
+//---------------------------------------//
+//--Functional Components-Class Based----//
+//---------------------------------------//
+
+Add a new folder and name with a capital first letter as the name of the component
+
+Add a new file .just in that folder with capital first letter
+
+
+
+---------
+it is recomended you use ES6 when creating a component to render JSX such as using arrow functions:
+It is fine to use a lowercase firtletter for the  function.
+
+const person = () => {
+    return <p> I am a person </p>
+}
+---------
+This will not work however if you do not import React at the top of your file:
+import React from 'react'
+
+At the bottom of the file you will also need to export the component you are creating:
+export default person;
+
+
+--The function component should look like this in the Person folder and Person file you created.
+
+Notice we dont need an import from the react Component in React since we are not using a class which extends component instead we are creating a function:
+
+
+Code Person.js:
+
+import React form 'react' 
+
+const person = () => {
+    return <p> I am a person </p>
+}
+
+export default person;
+
+
+---------
+In the file App.js you will need to import the function component at the top of the file
+
+import Person from './Person/Person';
+
+
+----------
+You wll use the function component by inserting it where you need it in the body of the file and the jsx will display
+
+<Person>
+
+You can reuse the function component multiple times and whatever jsx was part of that will duplicate.
+
+<Person />
+<Person />
+<Person />
+
+
+The component allows you to not have to fill up your app.js file with extra code and the Person Component is reusable as you can see above and it is also configerable as we will see next.
+
+-----------Dynamic Content
+
+In your person function component to add some dynamic content such as simple calculations or function calls or one line expressions you have to wrap them in single curly braces {}
+
+Code Person.js:
+const person = () => {
+    return <p>I'm a Person and I am {Math.floor(Math.random()*30)} years old!</p>
+};
+
+----------props
+
+By adding dynamic content to your component Person.js file you can add more customization and make it configerable.
+
+
+First you can use an argument in your person function component (props) which then becomes a reusable component with a defined template when you add your dynamic content.
+
+Props allow you to pass data from a parent (wrapping) component to a child (embedded) component
+
+ 
+Code Person.js:
+
+const person = (props) => {
+    return <p>I'm {props.name} and I am {props.age} years old!</p>
+};
+
+
+
+
+
+Code App.js:
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+       <h1>Hi, I'm a React App!</h1>
+       <p>This is really working!</p>
+       <Person name="Max" age="28" />
+       <Person name="Manu" age= "29" >My Hobbies: Racing</Person>
+       <Person name="Stephanie" age="26"/>
+      </div>
+    );
+
+
+
+-----STATE------
+
+State is available in class based components that extend components because a class has properties.
+State is managed inside the component.
+
+You should use function components as often as possible because using state should be used with caution.
+Being able to manipulate state from anywhere in your app can make your app unpredictable and hard to manage as it grows.
+But in some places it makes perfect sense to use.
+
+State can be initialized by assigning a value which is an object.
+In the example below we use an object with an array of objects
+
+App.js Code:
+class App extends Component {
+  state = {
+    persons: [
+      { name: 'Max', age: 28},
+      { name: 'Manu', age: 29},
+      { name: 'Stephanie', age: 26}
+    
+    ]
+  }
+
+The state can then be accessed by the render method by outputting something dynamic with single curly braces {}.
+The this. keyword will refer to the class due to ES6 syntax.
+The class has a state property and the render method but react calls the method so we shouldn't.
+
+Therefore you can access the state property with this.state and then the person array this.state.person[0].name.
+
+So now it is not hardcoded.
+
+If we change the name in the state property in App.js now it rerenders the render method in App.js.
+
+
+Code:
+render() {
+    return (
+      <div className="App">
+       <h1>Hi, I'm a React App!</h1>
+       <p>This is really working!</p>
+       <button>Switch Name</button>
+       <Person name={this.state.persons[0].name}age={this.state.persons[0].age} />
+       <Person name={this.state.persons[1].name}age={this.state.persons[1].age} >My Hobbies: Racing</Person>
+       <Person name={this.state.persons[2].name}age={this.state.persons[2].age}/>
+      </div>
+    );
+    // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
+  }
+
+
+  ----Handling Events with Methods------
+
+
+-We add onClick to the button Element notice it is different in JSX onClick wich a capial C.
+
+Code App.js:
+<button onClick={this.switchNameHandler}>Switch Name</button> 
+
+
+-When we name the function it is good policy to name it for its use as an Event Handler so here we use switchNameHandler this is not mandatory.
+
+-Notice we assign a function () =>{} to the property switchNameHandler
+
+switchNameHandler = () => {  
+    console.log('Was clicked!');
+  }
+
+ 
+-Notice we do not execute it immediately with the () at the end of switchNameHandler. What we do instead is pass a reference using the this. and referencing the property switchNameHandler which holds a function.
+
+Code:
+ <button onClick={this.switchNameHandler}>Switch Name</button> 
+----
+
+
+The whole Code:
+
+class App extends Component {
+  state = {
+    persons: [
+      { name: 'Max', age: 28},
+      { name: 'Manu', age: 29},
+      { name: 'Stephanie', age: 26}
+    
+    ]
+  }
+
+  switchNameHandler = () => {  // This is a function of your class or a property that holds a function that can be executed.
+    console.log('Was clicked!');
+  }
+
+  render() {
+    return (
+      <div className="App">
+       <h1>Hi, I'm a React App!</h1>
+       <p>This is really working!</p>
+       <button onClick={this.switchNameHandler}>Switch Name</button>  
+       <Person name={this.state.persons[0].name}age={this.state.persons[0].age} />
+       <Person name={this.state.persons[1].name}age={this.state.persons[1].age} >My Hobbies: Racing</Person>
+       <Person name={this.state.persons[2].name}age={this.state.persons[2].age}/>
+      </div>
+    );
+    // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
+  }
+}
+
+----Note----
+
+Props get passed to the component (similar to function parameters) whereas state is managed within the component (similar to variables declared within a function).
+
+-----Manipulating State-------
+
+There is a set state method the react library and component object use.
+It takes an object as an argument and will merge what we define to the existing old state.
+
+In example below we use the persons array of objects as the argument.
+
+The Dom is updated and react recognizes the state of the application changes.
+
+There are only two things that update the DOM and these are state and props. Ex: props.name, props.age
+
+In the below code now when you click the button the switchNameHandler changes the name and age in two areas.
+
+
+Code:
+
+class App extends Component {
+  state = {
+    persons: [
+      { name: 'Max', age: 28},
+      { name: 'Manu', age: 29},
+      { name: 'Stephanie', age: 26}
+    
+    ]
+  }
+
+  switchNameHandler = () => {  
+    // console.log('Was clicked!');
+    this.setState({
+      persons: [
+        { name: 'Maximilliano', age: 28 }, //Name is changed
+        { name: 'Manu', age: 29 },
+        { name: 'Stephanie', age: 27 } //Age is changed
+      ]
+    } )  
+  }
+
+  render() {
+    return (
+      <div className="App">
+       <h1>Hi, I'm a React App!</h1>
+       <p>This is really working!</p>
+       <button onClick={this.switchNameHandler}>Switch Name</button>  
+       <Person name={this.state.persons[0].name}age={this.state.persons[0].age} />
+       <Person name={this.state.persons[1].name}age={this.state.persons[1].age} >My Hobbies: Racing</Person>
+       <Person name={this.state.persons[2].name}age={this.state.persons[2].age}/>
+      </div>
+    );
+
+
+
+//--------------------------------------------------------------------------//
+//--------------------------------------------------------------------------//
+--(optional other way)----Using the useState()Hook for State Manipulation-----
+//--------------------------------------------------------------------------//
+//--------------------------------------------------------------------------//
+
+
+React hooks is used in functional components.
+
+Another way of managing state is in functional components with a feature called react hooks.
+
+Reacthooks is optional since it is a newer way and might not be as popular.
+
+--We first start by converting the class into a function in our example which we originally created as a class.
+
+We no longer use the render method so we only use return.
+
+
+
+-- UseState is the react hook that allows us to manage state in a functional component.
+
+We call it like a function useState();
+You then pass into it your initial state we previously used in our state property 
+Pass in the below:
+
+Code:
+   useState({  
+    persons: [
+      { name: 'Max', age: 28 },
+      { name: 'Manu', age: 29},
+      { name: 'Stephanie', age: 26}
+        
+    ],
+    otherState: 'some other value'
+  });
+
+
+useState returns an array with exactly two elements.
+We can store this in an constant named stateArr like in example below:
+Therefore the first element of the array we get back will be our current state and whenever we change it update the state.
+
+The second element in state array will be the function that allows us to update this state and rerender the component that is returned.
+
+
+Code:
+
+import React, { useState } from 'react'  //change from,{ Component } to useState
+import './App.css';
+import Person from './Person/Person';
+
+const app = props => {
+  const stateArr = useState({  
+    persons: [
+      { name: 'Max', age: 28 },
+      { name: 'Manu', age: 29},
+      { name: 'Stephanie', age: 26}
+        
+    ],
+    otherState: 'some other value'
+  });
+  
+  return (
+    <div className="App">
+      <h1>Hi, I'm a React App</h1>
+      <p>This is really Working!</p>
+      <button onClick={this.switchNameHandler}>Switch Name</button>  
+       <Person name={this.state.persons[0].name}age={this.state.persons[0].age} />
+       <Person name={this.state.persons[1].name}age={this.state.persons[1].age} >My Hobbies: Racing</Person>
+       <Person name={this.state.persons[2].name}age={this.state.persons[2].age}/>
+      </div>
+    );
+}
+
+
+
+//--------------------------
+We can also use a modern Javascript feature called array destructuring which works by adding square brackets to left of = sign.
+This allows us to pull elements out of the array that you get back from the right side of the = sign, so of the function call useState().
+
+In the square brackets we can give the elements any name we want
+
+The personsState will now give you access to the object persons.
+
+So wherever we used this.state we need to replace that with personState in the return/rendor method area.
+
+Because this.state only exists in classbased components.
+
+
+
+
+
+Code:
+
+import React, { useState } from 'react'  //change from,{ Component } to useState
+import './App.css';
+import Person from './Person/Person';
+
+const app = props => {
+  const [ personsState, setPersonsState ] = useState({  // add square brackets to left of equal sign
+    persons: [
+      { name: 'Max', age: 28 },
+      { name: 'Manu', age: 29},
+      { name: 'Stephanie', age: 26}
+        
+    ],
+    otherState: 'some other value'
+  });
+  
+  return (
+    <div className="App">
+      <h1>Hi, I'm a React App</h1>
+      <p>This is really Working!</p>
+      <button onClick={this.switchNameHandler}>Switch Name</button>  
+       <Person name={personsState.persons[0].name}age={personsState.persons[0].age} />
+       <Person name={personsState.persons[1].name}age={personsState.persons[1].age} >My Hobbies: Racing</Person>
+       <Person name={personsState.persons[2].name}age={personsState.persons[2].age}/>
+      </div>
+    );
+}
+
+
+//-------------Vid 45-------
+
+
+The setPersonsState allows us to add set a new state.
+
+For this we can re-add the switchNameHandler to our component but how do we add a method like it was before but to a functional component?
+
+We do this by adding functions inside function. 
+
+We add the switchNameHandler function now stored in a constant and put this inside the const app function.
+
+Now we have a component that can manage state and have a function that can perform an action on a click.
+
+We make sure there is no this.setState and replace it with setPersonsState
+
+
+
+Code:
+
+import React, { useState } from 'react'  //change from,{ Component } to useState
+import './App.css';
+import Person from './Person/Person';
+
+const app = props => {
+  const [ personsState, setPersonsState ] = useState({  // add square brackets to left of equal sign
+    persons: [
+      { name: 'Max', age: 28 },
+      { name: 'Manu', age: 29},
+      { name: 'Stephanie', age: 26}
+        
+    ],
+    otherState: 'some other value'
+  });
+  
+  const switchNameHandler = () => {  // This is now an inner function that performs an action
+  // console.log('Was clicked!');
+    setPersonsState({ //Changed to setPersonsState
+      persons: [
+        { name: 'Maximilliano', age: 28 }, //Name is changed
+        { name: 'Manu', age: 29 },
+        { name: 'Stephanie', age: 27 } //Age is changed
+      ]
+    });
+  };
+
+  return (
+    <div className="App">
+      <h1>Hi, I'm a React App</h1>
+      <p>This is really Working!</p>
+      <button onClick={switchNameHandler}>Switch Name</button>  //Changed to switchNameHandler
+       <Person name={personsState.persons[0].name}age={personsState.persons[0].age} />
+       <Person name={personsState.persons[1].name}age={personsState.persons[1].age} >My Hobbies: Racing</Person>
+       <Person name={personsState.persons[2].name}age={personsState.persons[2].age}/>
+      </div>
+    );
+}
+
+   
