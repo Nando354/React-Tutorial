@@ -39,7 +39,7 @@ const App = props => {
   );
 }
 
-
+export default App;
 //-------------------------Other
 // function App() {
 //   return (
@@ -62,7 +62,7 @@ const App = props => {
 //   );
 // }
 
-export default App;
+
 
 
 

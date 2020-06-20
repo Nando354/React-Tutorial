@@ -2,9 +2,28 @@
 
 //Notes:
 
+
+
+
+
+
+
 ------------------Understanding Component Basics-------------------------
 
 React is all about components to construct applications.
+
+Components are basically custom html elements using jsx.
+
+You usually have one root component like App.js.
+
+In there you could nest all other components or have other nested components.
+
+You can create componenst in a class or in a function.
+
+We mostly will use class but learn both ways.
+
+The class has a render method called to render something on the screen such as jsx, listen to events, or whatever you need in your application
+
 
 Below we see the Component is imported from react we then see the class App component created in App.js as it extends from the object or class Component.
 
@@ -27,7 +46,7 @@ class App extends Component {
 export default App;
 
 
---The app component is used in the index.js file where it is rendered into the Id 'root' element
+--The app component is used in the index.js file where it is rendered into the Id 'root' element of the index.html file
 
 
 --Code index.js:
@@ -71,11 +90,11 @@ export const baseData = 10;
 
 Import files to app.js file --------
 
--2 options because this object was set as default
+-There are 2 options of naming because this object was set as default
 import person from './person.js'
 import prs from ',/person.js'
 
--These two objects have to be imported in this manner because they are not set as default
+-These two objects have to be imported in this manner when they are not set as default
 import {baseData} from './utility.js'
 import [clean] from './utility.js'
 -------------------------------------------
@@ -85,12 +104,14 @@ import [clean] from './utility.js'
 When you create a js file you need to set it up so it works as needed in react
 
 //Import the react library:
-Code App.js:
+Code, App.js:
+
 import React from 'react';
 -------------------------------------------
 
 //Render things to the page using ReactDOM.render but first you have to import it from the React DOM library.
-Code:
+Code, Index.js:
+
 import ReactDOM from 'react-dom';
 -------------------------------------------
 
@@ -106,7 +127,13 @@ JSX:
 
 But JSX does get converted in the background to React.createElement().
 
---React.createElement Arguments:--
+
+
+
+//--------React.createElement Arguments:--------//
+
+As mentioned we do not create these manually because we use JSX but it is good to know how it works.
+
 Let's briefly talk about the arguments of React.createElement().
 
 The first one is the type of element we're creating, in this case an <h1> tag. This could also be another React component. If we're creating an HTML element, we pass in the element name as a string, just like we do below ex: 'h1'. If we're creating a React component, we pass in the variable that the component is assigned to.
@@ -119,10 +146,11 @@ Code:
 const title = React.creatElement('h1', {}, 'My First React Code');
 
 
--------------------------------------------
 
 
--Render-
+
+//-------------ReactDOM.render()------------//
+
 Now that we have our element, it's time to render it to the page. We do this using ReactDOM.render(). 
 
 This takes two arguments: the first one being the thing we want to render (our title element), and the second one is a target DOM node to render things into.
@@ -159,7 +187,7 @@ ReactDOM.render(
 
 JSX
 
-Class cannot be used this is why we use className.
+The syntax Class cannot be used this is why we use className.
 <div> etc.. are provided by JSX it is not real html but in most cases works like it.
 
 
@@ -276,7 +304,7 @@ We can also add any other HTML attributes here, like disabled, id, and so on. Th
 
 
 //---------------------------------------//
-//--Functional Components-Class Based----//
+//--Creating a functional component----//
 //---------------------------------------//
 
 Add a new folder and name with a capital first letter as the name of the component
@@ -286,8 +314,8 @@ Add a new file .just in that folder with capital first letter
 
 
 ---------
-it is recomended you use ES6 when creating a component to render JSX such as using arrow functions:
-It is fine to use a lowercase firtletter for the  function.
+it is recomended you use ES6 when creating a functional component to render JSX such as using arrow functions:
+It is fine to use a lowercase firtletter for the function.
 
 const person = () => {
     return <p> I am a person </p>
@@ -296,7 +324,7 @@ const person = () => {
 This will not work however if you do not import React at the top of your file:
 import React from 'react'
 
-At the bottom of the file you will also need to export the component you are creating:
+At the bottom of the file you will also need to export the fuction you are creating:
 export default person;
 
 
@@ -325,6 +353,8 @@ import Person from './Person/Person';
 ----------
 You wll use the function component by inserting it where you need it in the body of the file and the jsx will display
 
+Components start with an uppercase letter.
+
 <Person>
 
 You can reuse the function component multiple times and whatever jsx was part of that will duplicate.
@@ -334,38 +364,46 @@ You can reuse the function component multiple times and whatever jsx was part of
 <Person />
 
 
-The component allows you to not have to fill up your app.js file with extra code and the Person Component is reusable as you can see above and it is also configerable as we will see next.
+The function component allows you to not have to fill up your app.js file with extra code and the Person Component is reusable as you can see above and it is also configerable as we will see next.
 
------------Dynamic Content
+//--------36---Dynamic Content----------------//
 
-In your person function component to add some dynamic content such as simple calculations or function calls or one line expressions you have to wrap them in single curly braces {}
+In your person function component to add some dynamic content such as simple calculations or function calls or one line expressions you have to wrap them in single curly braces {} otherwise it will just appear as text.
 
 Code Person.js:
 const person = () => {
     return <p>I'm a Person and I am {Math.floor(Math.random()*30)} years old!</p>
 };
 
-----------props
+
+
+//-----------37-----Props---------------------//
 
 By adding dynamic content to your component Person.js file you can add more customization and make it configerable.
 
+You can then have something return/rendered from your App.js file that is specified as jsx as shown below in the html we added.
 
-First you can use an argument in your person function component (props) which then becomes a reusable component with a defined template when you add your dynamic content.
+
+First you can use an argument in your person function component called (props) which then becomes a reusable component with a defined template when you add your dynamic content.
 
 Props allow you to pass data from a parent (wrapping) component to a child (embedded) component
 
  
 Code Person.js:
 
-const person = (props) => {
-    return <p>I'm {props.name} and I am {props.age} years old!</p>
+import React from 'react';
+
+const person = (props) => {  //wrapping
+    return <p>I'm {props.name} and I am {props.age} years old!</p> //child
 };
 
 
 
-
-
 Code App.js:
+
+import React, { Component } from 'react';
+import './App.css'
+import Person from './Person/Person';
 
 class App extends Component {
   render() {
@@ -378,13 +416,135 @@ class App extends Component {
        <Person name="Stephanie" age="26"/>
       </div>
     );
+  }
+}
+
+export default App;
 
 
 
------STATE------
+
+//-----------38-----Children Prop---------------------//
+
+
+When we output the above code it is rendered on the DOM all except the the text:
+<Person>My Hobbies: Racing</Person>
+Below we will show how to also render this text using props.children.
+
+
+
+Now I also want to output whatever we pass between the opening and closing tag of our custom component.
+
+There is a special prop we can access that React provides, we can provide access to it in the person component.
+
+I will create a wrapping element simply a div and I want to wrap the paragraph
+
+inside of this div and also add another element after this paragraph {props.childresn}. This other element should also
+
+be a paragraph maybe but it should be a paragraph which outputs the part
+
+we pass in between. We can simply do that by using single curly braces to put something dynamic, accessing
+
+props <p>{props.children}</p>.
+
+
+Children refers to any elements and this includes plain text as we have it here between the opening and closing tag of our component >My Hobbies: Racing<
+
+This doesn't have to be just text, could be unordered list with multiple list items, could be other react
+
+components, anything can go between here. And these children are now output with this syntax, of course you don't have to wrap it in a paragraph, you can use it anywhere in your jsx code,
+
+
+The code will now render the text >My Hobbies: Racing< but if you inspect it on chrome it will show as an empty <p> tag because props.children is basically undefined as null.
+
+
+
+--Code, Person.js:
+
+import React from 'react'
+
+const person = (props) => {  //wrapping
+    return (
+      <div>
+        <p>I'm {props.name} and I am {props.age} years old!</p> //child
+        <p>{props.children}</p>
+      </div>
+    )
+};
+
+export default person;
+
+
+--
+
+Code App.js:
+
+import React, { Component } from 'react';
+import './App.css'
+import Person from './Person/Person';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+       <h1>Hi, I'm a React App!</h1>
+       <p>This is really working!</p>
+       <Person name="Max" age="28" />
+       <Person name="Manu" age= "29" >My Hobbies: Racing</Person>
+       <Person name="Stephanie" age="26"/>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+
+Ans:
+
+Hi, I'm a React App!
+This is really working!
+I'm Max and I am 28 years old!
+I'm Manu and I am 29 years old!
+My Hobbies: Racing
+I'm Stephanie and I am 26 years old!
+
+
+
+
+//------------------------------------------//
+
+When creating components, you have the choice between two different ways:
+
+Functional components (also referred to as "presentational", "dumb" or "stateless" components - more about this later in the course) => const cmp = () => { return <div>some JSX</div> } (using ES6 arrow functions as shown here is recommended but optional)
+
+
+class-based components (also referred to as "containers", "smart" or "stateful" components) => class Cmp extends Component { render () { return <div>some JSX</div> } } 
+We'll of course dive into the difference throughout this course, you can already note that you should use 1) as often as possible though. It's the best-practic
+
+
+
+//-----------------STATE-(In Class Based Components)-------------------//
+
+
+
+In the last lectures we had a look at props, props simply an object giving us access to all the attributes
+
+we pass to our own components.
+
+*** Now sometimes you don't want to get some information from outside but you want to have it inside a component and change it from inside there too, State allows us to do this from within the App.js file.
 
 State is available in class based components that extend components because a class has properties.
-State is managed inside the component.
+State is managed inside the component such as App.js. where a file has the following:
+
+class App extends Component
+
+So you would not be able to use State in Person.js since it does not use "class App extends Component" and it is also a function and that would need const or var which we arent using here for state.
+
+Side Note: you can now use State in functional components by using React Hooks.
+
+Also, whereas props are set and passed from outside like name and age in the person component, state is managed from inside a component.
 
 You should use function components as often as possible because using state should be used with caution.
 Being able to manipulate state from anywhere in your app can make your app unpredictable and hard to manage as it grows.
@@ -404,18 +564,20 @@ class App extends Component {
     ]
   }
 
-The state can then be accessed by the render method by outputting something dynamic with single curly braces {}.
+The state which is a property of the class App extends Component can then be accessed by the render method by outputting something dynamic with single curly braces {}.
+
 The this. keyword will refer to the class due to ES6 syntax.
-The class has a state property and the render method but react calls the method so we shouldn't.
+
+The class has a state property and the render method but react calls the method on its own so we do not have to.
 
 Therefore you can access the state property with this.state and then the person array this.state.person[0].name.
 
-So now it is not hardcoded.
+So now it is not hardcoded as you can see in the code below:
 
-If we change the name in the state property in App.js now it rerenders the render method in App.js.
+If we change the name or age in the state property in App.js now it rerenders using the render method in App.js all within the same file.
 
+Code App.js:
 
-Code:
 render() {
     return (
       <div className="App">
@@ -427,14 +589,14 @@ render() {
        <Person name={this.state.persons[2].name}age={this.state.persons[2].age}/>
       </div>
     );
-    // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
+    
   }
 
 
-  ----Handling Events with Methods------
+//----Handling Events with Methods------//
 
 
--We add onClick to the button Element notice it is different in JSX onClick wich a capial C.
+-We add onClick to the button Element notice it is different in JSX onClick with a capial C in jsx.
 
 Code App.js:
 <button onClick={this.switchNameHandler}>Switch Name</button> 
@@ -442,21 +604,30 @@ Code App.js:
 
 -When we name the function it is good policy to name it for its use as an Event Handler so here we use switchNameHandler this is not mandatory.
 
--Notice we assign a function () =>{} to the property switchNameHandler
+-Notice we assign a ES6 function () =>{} to the property switchNameHandler so it basically becomes a method of class App, it is still a property but a property which holds a normal function.
 
 switchNameHandler = () => {  
     console.log('Was clicked!');
   }
 
  
--Notice we do not execute it immediately with the () at the end of switchNameHandler. What we do instead is pass a reference using the this. and referencing the property switchNameHandler which holds a function.
+-Notice we do not execute it immediately with the () at the end of switchNameHandler. What we do instead is pass a reference using the this. and referencing the property switchNameHandler which holds a function. This function will be used to edit the state.
+
+Notice we did not add parenthesis switchNameHandler() to the onclick, we don't want it to execute immediately. 
+We only want to pass a reference and we do this by using this. and then referring to that property switchNameHandler which
+holds a function. 
 
 Code:
- <button onClick={this.switchNameHandler}>Switch Name</button> 
+ <button onClick={this.switchNameHandler}>Switch Name</button> //
 ----
 
-
+App.js
 The whole Code:
+
+
+import React, { Component } from 'react';
+import './App.css'
+import Person from './Person/Person';
 
 class App extends Component {
   state = {
@@ -483,29 +654,61 @@ class App extends Component {
        <Person name={this.state.persons[2].name}age={this.state.persons[2].age}/>
       </div>
     );
-    // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
 }
+
+export default App;
+
+
+We now have a button that is ready to work for now if clicked it consoles:
+
+Ans: 
+
+Was clicked!
+
+
+
 
 ----Note----
 
 Props get passed to the component (similar to function parameters) whereas state is managed within the component (similar to variables declared within a function).
 
------Manipulating State-------
 
-There is a set state method the react library and component object use.
+
+
+
+
+//-------43-----Manipulating State------this.setState()------//
+
+
+Now we want to manipulate the state upon a click.
+
+There is a set state method the react library and component object provide.
+
+You also access it with this.setState()
+
 It takes an object as an argument and will merge what we define to the existing old state.
 
-In example below we use the persons array of objects as the argument.
+In example below we use the persons array of objects as the argument and it does not use the otherState property as an argument, it just picks up the first one which is persons.
+
+So we define that the onClick switchNameHandler will change name from Max to Maximillian and change Stephanie's age to 27.
+
+This will do so and overide the original persons property state but will leave the otherState as it was unchanged.
+
+Notice otherState was also not mentioned in the switchNameHandler function.
 
 The Dom is updated and react recognizes the state of the application changes.
 
 There are only two things that update the DOM and these are state and props. Ex: props.name, props.age
 
-In the below code now when you click the button the switchNameHandler changes the name and age in two areas.
+In the below code now when you click the button the switchNameHandler changes the name and age in two areas and the DOM is updated.
 
-
+App.js
 Code:
+
+import React, { Component } from 'react';
+import './App.css'
+import Person from './Person/Person';
 
 class App extends Component {
   state = {
@@ -513,12 +716,11 @@ class App extends Component {
       { name: 'Max', age: 28},
       { name: 'Manu', age: 29},
       { name: 'Stephanie', age: 26}
-    
-    ]
+    ],
+    otherState: 'some other value'
   }
 
   switchNameHandler = () => {  
-    // console.log('Was clicked!');
     this.setState({
       persons: [
         { name: 'Maximilliano', age: 28 }, //Name is changed
@@ -539,14 +741,25 @@ class App extends Component {
        <Person name={this.state.persons[2].name}age={this.state.persons[2].age}/>
       </div>
     );
+  }
+}
+
+export default App;
 
 
 
-//--------------------------------------------------------------------------//
-//--------------------------------------------------------------------------//
---(optional other way)----Using the useState()Hook for State Manipulation-----
-//--------------------------------------------------------------------------//
-//--------------------------------------------------------------------------//
+
+
+
+
+
+
+
+//----------------------------------45----------------------------------------//
+//------------------------(optional other way)--------------------------------//
+//--Using the useState()Hook for State Manipulation in functional components--//
+//----------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
 
 
 React hooks is used in functional components.
@@ -680,13 +893,16 @@ We make sure there is no this.setState and replace it with setPersonsState
 
 
 
-Code:
+All Code App.js:
 
-import React, { useState } from 'react'  //change from,{ Component } to useState
+import React, { useState } from 'react';
 import './App.css';
-import Person from './Person/Person';
+import Person from './Person/Person'
 
-const app = props => {
+
+
+
+const App = props => {
   const [ personsState, setPersonsState ] = useState({  // add square brackets to left of equal sign
     persons: [
       { name: 'Max', age: 28 },
@@ -712,12 +928,12 @@ const app = props => {
     <div className="App">
       <h1>Hi, I'm a React App</h1>
       <p>This is really Working!</p>
-      <button onClick={switchNameHandler}>Switch Name</button>  //Changed to switchNameHandler
-       <Person name={personsState.persons[0].name}age={personsState.persons[0].age} />
-       <Person name={personsState.persons[1].name}age={personsState.persons[1].age} >My Hobbies: Racing</Person>
+      <button onClick={switchNameHandler}>Switch Name</button>  
+       <Person name={personsState.persons[0].name}age={personsState.persons[0].age}/>
+       <Person name={personsState.persons[1].name}age={personsState.persons[1].age}>My Hobbies: Racing</Person>
        <Person name={personsState.persons[2].name}age={personsState.persons[2].age}/>
-      </div>
-    );
+    </div>
+  );
 }
 
-   
+export default App;
