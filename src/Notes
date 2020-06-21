@@ -439,7 +439,7 @@ There is a special prop we can access that React provides, we can provide access
 
 I will create a wrapping element simply a div and I want to wrap the paragraph
 
-inside of this div and also add another element after this paragraph {props.childresn}. This other element should also
+inside of this div and also add another element after this paragraph {props.children}. This other element should also
 
 be a paragraph maybe but it should be a paragraph which outputs the part
 
@@ -450,7 +450,7 @@ props <p>{props.children}</p>.
 
 Children refers to any elements and this includes plain text as we have it here between the opening and closing tag of our component >My Hobbies: Racing<
 
-This doesn't have to be just text, could be unordered list with multiple list items, could be other react
+This doesn't have to be just text, it could be an unordered list with multiple list items, could be other react
 
 components, anything can go between here. And these children are now output with this syntax, of course you don't have to wrap it in a paragraph, you can use it anywhere in your jsx code,
 
@@ -774,7 +774,7 @@ We no longer use the render method so we only use return.
 
 
 
--- UseState is the react hook that allows us to manage state in a functional component.
+-- useState is the react hook that allows us to manage state in a functional component.
 
 We call it like a function useState();
 You then pass into it your initial state we previously used in our state property 
@@ -845,7 +845,7 @@ Because this.state only exists in classbased components.
 
 
 
-
+App.js
 Code:
 
 import React, { useState } from 'react'  //change from,{ Component } to useState
@@ -913,8 +913,7 @@ const App = props => {
     otherState: 'some other value'
   });
   
-  const switchNameHandler = () => {  // This is now an inner function that performs an action
-  // console.log('Was clicked!');
+  const switchNameHandler = () => {  // This is now an inner function that performs an action changing name and age
     setPersonsState({ //Changed to setPersonsState
       persons: [
         { name: 'Maximilliano', age: 28 }, //Name is changed
@@ -937,3 +936,375 @@ const App = props => {
 }
 
 export default App;
+
+
+
+//----------------------------------------------------------------------------//
+//---------------------------Back to Class Based Component--------------------//
+//----------------------------------------------------------------------------//
+
+A stateful component is a component that manages state also called smart components or container because they contain the state of your component.
+
+
+A component like the person.js file, so
+
+this person component is a stateless component because it has no internal state management and it
+
+is a good practice to create as many of these stateless components, also called dumb or presentational because they have
+
+no internal logic or presentational components because they present something, they output content, they
+
+only get external data and output it in a structured way,
+
+It makes it easier to manage the code.
+
+
+
+//--------------47----Passing Method References Btw Components---------------//
+
+
+If we wanted to call the switchNameHandler by not using only the button but by clicking a paragraph inside the person component.
+
+We would'nt be able to add onClick to the paragraph because we can't call switchNameHandler from person.js because switchNameHandler is in a different file and class.
+
+
+What we can do is pass a reference to this handler as a property to our component.
+
+We first need to restructure the App.js the syntax order of the person tag so we can better see which properties we are passing or leaving alone.
+
+I will only want to make the second person tag clickable. So I will add a new property there and name it click and pass into it as a reference this.switchNameHandler as we did in the button as well.
+
+I now go to Person.js and add {props.click} in the person tag.
+
+We can now click the button or the 2nd paragraph to change the state.
+
+*** This is something important to understand, an important pattern,
+
+you can pass methods also as props so that you can call a method which might change the state in another
+
+component which doesn't have direct access to the state and which shouldn't have direct access to the
+
+state.
+
+It's a common pattern and it's important to know
+
+
+Person.js
+Code:
+
+import React from 'react';
+
+const person = (props) => {  
+    return (
+      <div>
+        <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p> // Make this paragraph clickable
+        <p>{props.children}</p>
+      </div>
+    )
+};
+
+export default person;
+
+
+
+
+
+App.js
+Code:
+
+import React, { Component } from 'react';
+import './App.css'
+import Person from './Person/Person';
+
+class App extends Component {
+  state = {
+    persons: [
+      { name: 'Max', age: 28},
+      { name: 'Manu', age: 29},
+      { name: 'Stephanie', age: 26}
+    ],
+    otherState: 'some other value'
+  }
+
+  switchNameHandler = () => {  
+    this.setState({
+      persons: [
+        { name: 'Maximilliano', age: 28 }, //Name is changed
+        { name: 'Manu', age: 29 },
+        { name: 'Stephanie', age: 27 } //Age is changed
+      ]
+    } )  
+  }
+
+  render() {
+    return (
+      <div className="App">
+       <h1>Hi, I'm a React App!</h1>
+       <p>This is really working!</p>
+       <button onClick={this.switchNameHandler}>Switch Name</button>  
+       <Person 
+        name={this.state.persons[0].name}
+        age={this.state.persons[0].age} />
+       <Person 
+        name={this.state.persons[1].name}
+        age={this.state.persons[1].age}
+        click={this.switchNameHandler} >My Hobbies: Racing</Person>
+       <Person 
+        name={this.state.persons[2].name}
+        age={this.state.persons[2].age}/>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+
+
+------passing a new name-------
+
+If we want to pass a value to our function switchNameHandler to maybe change the hardcoded name Maximilian and change it to Max!
+
+We can do so by adding newName as an argument into the switchNameHandler arrow function and replacing Maximilian in thre persons Object with newName.
+
+
+There are two ways to pass that data.
+
+1. Bind
+
+In the render method use .bind(this) which would refer to the function in the class.
+
+However we will pass Maxington when we click the button and Max! when we click the paragraph.
+
+So we will enter onClick={this.switchNameHandler.bind(this, 'Maxington')} and pass a second argument to bind and this will now be a list of arguments passed to the function.
+
+So lets also add to the paragraph, click={this.switchNameHandler.bind(this, 'Max!')}
+
+2. 
+
+The other option is if we added an arrow function to the button <button onClick={() => this.switchNameHandler('Maxi!!')}>Switch Name</button>.
+
+Notice it is entered in a one line anonymous arrow function so it returns switchNameHandler(). It is entered as a function ready to be executed immediately due to the ().
+
+'Maxi!!' is passed in as an argument.
+
+Now this is a very convenient syntax but it can be inefficient, react can re-render certain things
+
+in your app too often so I don't necessarily recommend using this if you don't have to, use the bind
+
+syntax instead
+
+if you can. Still I'll leave it here, you may use it and depending on the size of your application you also
+
+might not feel that big of a performance hit
+
+but be aware that this can be inefficient.
+
+
+Person.js
+Code:
+
+import React from 'react';
+
+const person = (props) => {  
+    return (
+      <div>
+        <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p> // Make this paragraph clickable
+        <p>{props.children}</p>
+      </div>
+    )
+};
+
+export default person;
+
+
+
+
+
+App.js
+Code:
+
+import React, { Component } from 'react';
+import './App.css'
+import Person from './Person/Person';
+
+class App extends Component {
+  state = {
+    persons: [
+      { name: 'Max', age: 28},
+      { name: 'Manu', age: 29},
+      { name: 'Stephanie', age: 26}
+    ],
+    otherState: 'some other value'
+  }
+
+  switchNameHandler = (newName) => {  //Added argument
+    this.setState({
+      persons: [
+        { name: newName, age: 28 }, //Name is changed
+        { name: 'Manu', age: 29 },
+        { name: 'Stephanie', age: 27 } //Age is changed
+      ]
+    } )  
+  }
+
+  render() {
+    return (
+      <div className="App">
+       <h1>Hi, I'm a React App!</h1>
+       <p>This is really working!</p>
+       <button onClick={this.switchNameHandler.bind(this, 'Maxington')}>Switch Name</button>  //Changed Name
+       <Person 
+        name={this.state.persons[0].name}
+        age={this.state.persons[0].age} />
+       <Person 
+        name={this.state.persons[1].name}
+        age={this.state.persons[1].age}
+        click={this.switchNameHandler.bind(this, 'Max!')} >My Hobbies: Racing</Person> //Chanded Name
+       <Person 
+        name={this.state.persons[2].name}
+        age={this.state.persons[2].age}/>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+
+//--------------48----Adding Two Way Binding---------------//
+
+
+If we wanted to change a name on our own in the Person component by typing it in a text area.
+
+We add an input element of type text and add an event onChange{}.
+
+What we type in here will be a new name so we listen for a special event called onChange which is fired when the value in the input changes.
+
+I then want to execute some method in the onChange{} which I need to pass down from my app.js file.
+
+
+So in App.js I will create a new handler method and call it nameChangedHandler. I will do so using an arrow function and an (event) object as an argument in the function. I will also add in the body of the function the this.setState persons state I want to change.
+
+
+For now we will only work on changing the name Manu even though we will have multiple input text boxes under each person.
+
+
+In App.js we will now add a event with a target and value property which makes it a good updated value for name.
+
+
+The nameChangedHandler is my handler, now I need to pass this to a component to be able to access it from there.
+
+And since I only can change Manu for now , I will only pass it to the Manu person in the render method in App.js as changed={this.nameChangedHandler}
+
+I can now access this.changed property to the person.js and simply call props changed here onChange={props.changed} or not call it don't add
+
+parentheses but simply pass the reference to it
+
+and keep in mind this refers to the method we declared in app.js, this.nameChangedHandler.
+
+The event object will actually be passed to it automatically by react, like a normal javascript.
+
+where you always by default get access to the event object.
+
+
+Person.js
+Code:
+
+import React from 'react';
+
+const person = (props) => {  
+    return (
+      <div>
+        <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p> // Make this paragraph clickable
+        <p>{props.children}</p>
+        <input type="text" onChange={props.changed} />
+      </div>
+    )
+};
+
+export default person;
+
+
+
+
+
+
+App.js
+Code:
+
+import React, { Component } from 'react';
+import './App.css'
+import Person from './Person/Person';
+
+class App extends Component {
+  state = {
+    persons: [
+      { name: 'Max', age: 28},
+      { name: 'Manu', age: 29},
+      { name: 'Stephanie', age: 26}
+    ],
+    otherState: 'some other value'
+  }
+
+  switchNameHandler = (newName) => {  //Added argument
+    this.setState({
+      persons: [
+        { name: newName, age: 28 }, //Name is changed
+        { name: 'Manu', age: 29 },
+        { name: 'Stephanie', age: 27 } //Age is changed
+      ]
+    } )  
+  }
+
+  nameChangedHandler = (event) => {
+    this.setState( {
+      persons: [
+        { name: 'Max', age: 28},
+        { name: event.target.value, age: 29},
+        { name: 'Stephanie', age: 26}
+      ]
+    })
+  }
+
+  render() {
+    return (
+      <div className="App">
+       <h1>Hi, I'm a React App!</h1>
+       <p>This is really working!</p>
+       <button onClick={this.switchNameHandler.bind(this, 'Maxington')}>Switch Name</button>  
+       <Person 
+        name={this.state.persons[0].name}
+        age={this.state.persons[0].age} />
+       <Person 
+        name={this.state.persons[1].name}
+        age={this.state.persons[1].age}
+        click={this.switchNameHandler.bind(this, 'Max!')} 
+        changed={this.nameChangedHandler} >My Hobbies: Racing</Person> // Add event
+       <Person 
+        name={this.state.persons[2].name}
+        age={this.state.persons[2].age}/>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+
+Ans:
+Hi, I'm a React App!
+This is really working!
+
+Switch Name
+I'm Max and I am 28 years old!
+textbox
+I'm tkbe and I am 29 years old!
+textbox = tkbe
+My Hobbies: Racing
+textbox
+I'm Stephanie and I am 27 years old!
+
